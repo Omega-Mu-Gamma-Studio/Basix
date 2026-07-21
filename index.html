@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basix – DPSD Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>" />
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <span class="brand">Basix</span>
+            <span class="tagline">DPSD Calculator</span>
+        </div>
+        <div class="header-controls">
+            <label for="themeSelect" class="theme-label">Theme</label>
+            <select id="themeSelect">
+                <option value="dark-neon">Dark Neon</option>
+                <option value="light-clean">Light Clean</option>
+                <option value="solarized">Solarized</option>
+                <option value="matrix">Matrix</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- ===== MAIN APP ===== -->
+    <main>
+        <!-- LEFT PANEL: Input (30%) -->
+        <section class="input-panel">
+            <h2>Input</h2>
+
+            <div class="input-group">
+                <label for="numberInput">Number / Expression</label>
+                <input type="text" id="numberInput" placeholder="e.g. 1011.101 or A + B" />
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="fromBase">From Base</label>
+                    <select id="fromBase">
+                        <option value="2">Binary (2)</option>
+                        <option value="8">Octal (8)</option>
+                        <option value="10" selected>Decimal (10)</option>
+                        <option value="16">Hexadecimal (16)</option>
+                        <option value="custom">Custom (2–36)</option>
+                    </select>
+                </div>
+                <div class="input-group" id="customFromGroup" style="display:none;">
+                    <label for="customFromBase">Custom Base</label>
+                    <input type="number" id="customFromBase" min="2" max="36" value="10" />
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="toBase">To Base</label>
+                    <select id="toBase">
+                        <option value="2">Binary (2)</option>
+                        <option value="8">Octal (8)</option>
+                        <option value="10" selected>Decimal (10)</option>
+                        <option value="16">Hexadecimal (16)</option>
+                        <option value="custom">Custom (2–36)</option>
+                    </select>
+                </div>
+                <div class="input-group" id="customToGroup" style="display:none;">
+                    <label for="customToBase">Custom Base</label>
+                    <input type="number" id="customToBase" min="2" max="36" value="10" />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="operationSelect">Operation</label>
+                <select id="operationSelect">
+                    <option value="convert">Convert</option>
+                    <option value="add">Add (+) — binary only</option>
+                    <option value="subtract">Subtract (−) — binary only</option>
+                    <option value="bcd">Binary → BCD</option>
+                    <option value="gray">Binary → Gray Code</option>
+                    <option value="complement1">1's Complement</option>
+                    <option value="complement2">2's Complement</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="secondNumberGroup" style="display:none;">
+                <label for="secondNumber">Second Number (for add/subtract)</label>
+                <input type="text" id="secondNumber" placeholder="e.g. 1101" />
+            </div>
+
+            <button id="calculateBtn">🚀 Calculate</button>
+
+            <div class="input-group" style="margin-top: 0.5rem;">
+                <label>
+                    <input type="checkbox" id="showStepsCheck" checked />
+                    Show Steps
+                </label>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Output + Steps (70%) -->
+        <section class="output-panel">
+            <div class="result-box" id="resultBox">
+                <span class="result-label">Result</span>
+                <span class="result-value" id="resultValue">—</span>
+                <button id="copyBtn" title="Copy result">📋</button>
+            </div>
+            <div class="steps-container" id="stepsContainer">
+                <div class="steps-placeholder">
+                    <p>Enter values and click <strong>Calculate</strong></p>
+                    <p class="hint">Steps will appear here</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>
+            &copy; 2026 <strong>Omega Mu Gamma Studio</strong> ·
+            <a href="#" target="_blank">MIT License</a> ·
+            Built with ❤️ for DPSD students
+        </p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
