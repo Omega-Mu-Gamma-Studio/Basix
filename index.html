@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Basix – DPSD Calculator</title>
+    <title>Basix – DPSD Notebook</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📓</text></svg>" />
 </head>
 <body>
 
@@ -13,31 +13,25 @@
     <header>
         <div class="logo">
             <span class="brand">Basix</span>
-            <span class="tagline">DPSD Calculator</span>
+            <span class="tagline">a notebook for number systems</span>
         </div>
         <div class="header-controls">
-            <label for="themeSelect" class="theme-label">Theme</label>
-            <select id="themeSelect">
-                <option value="dark-neon">Dark Neon</option>
-                <option value="light-clean">Light Clean</option>
-                <option value="solarized">Solarized</option>
-                <option value="matrix">Matrix</option>
-            </select>
+            <button id="themeToggle" type="button" title="Switch paper style"></button>
         </div>
     </header>
 
     <!-- ===== MAIN APP ===== -->
     <main>
-        <!-- LEFT PANEL: Input (30%) -->
+        <!-- LEFT PAGE: Input -->
         <section class="input-panel">
-            <h2>Input</h2>
+            <h2>What's the problem?</h2>
 
             <div class="input-group">
-                <label for="numberInput">Number / Expression</label>
-                <input type="text" id="numberInput" placeholder="e.g. 1011.101 or A + B" />
+                <label for="numberInput" id="numberInputLabel">Number</label>
+                <input type="text" id="numberInput" placeholder="e.g. 1011.101" autocomplete="off" />
             </div>
 
-            <div class="input-row">
+            <div class="input-row" id="baseFieldsRow">
                 <div class="input-group">
                     <label for="fromBase">From Base</label>
                     <select id="fromBase">
@@ -54,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="input-row">
+            <div class="input-row" id="toBaseFieldsRow">
                 <div class="input-group">
                     <label for="toBase">To Base</label>
                     <select id="toBase">
@@ -74,42 +68,90 @@
             <div class="input-group">
                 <label for="operationSelect">Operation</label>
                 <select id="operationSelect">
-                    <option value="convert">Convert</option>
-                    <option value="add">Add (+) — binary only</option>
-                    <option value="subtract">Subtract (−) — binary only</option>
-                    <option value="bcd">Binary → BCD</option>
-                    <option value="gray">Binary → Gray Code</option>
-                    <option value="complement1">1's Complement</option>
-                    <option value="complement2">2's Complement</option>
+                    <optgroup label="Conversion">
+                        <option value="convert">Convert Base</option>
+                        <option value="ascii">ASCII ⇄ Code</option>
+                    </optgroup>
+                    <optgroup label="Arithmetic">
+                        <option value="add">Add (+) — binary</option>
+                        <option value="subtract">Subtract (−) — binary</option>
+                    </optgroup>
+                    <optgroup label="Codes">
+                        <option value="bcd">Binary → BCD</option>
+                        <option value="excess3">Decimal → Excess-3</option>
+                        <option value="gray">Binary → Gray Code</option>
+                    </optgroup>
+                    <optgroup label="Representations">
+                        <option value="complement1">1's Complement (flip bits)</option>
+                        <option value="complement2">2's Complement (operation)</option>
+                        <option value="comp9">9's Complement — decimal</option>
+                        <option value="comp10">10's Complement — decimal</option>
+                        <option value="interpSM">Interpret as Sign-Magnitude</option>
+                        <option value="interp1C">Interpret as 1's Complement</option>
+                        <option value="interp2C">Interpret as 2's Complement</option>
+                        <option value="ieee754">IEEE-754 Single Float</option>
+                    </optgroup>
                 </select>
             </div>
 
             <div class="input-group" id="secondNumberGroup" style="display:none;">
-                <label for="secondNumber">Second Number (for add/subtract)</label>
-                <input type="text" id="secondNumber" placeholder="e.g. 1101" />
+                <label for="secondNumber">Second Number (binary)</label>
+                <input type="text" id="secondNumber" placeholder="e.g. 1101" autocomplete="off" />
             </div>
 
-            <button id="calculateBtn">🚀 Calculate</button>
+            <div class="input-row" id="asciiGroup" style="display:none;">
+                <div class="input-group">
+                    <label for="asciiDirection">Direction</label>
+                    <select id="asciiDirection">
+                        <option value="encode">Text → Code</option>
+                        <option value="decode">Code → Text</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="asciiEncoding">Encoding</label>
+                    <select id="asciiEncoding">
+                        <option value="2">Binary</option>
+                        <option value="16">Hex</option>
+                    </select>
+                </div>
+            </div>
 
-            <div class="input-group" style="margin-top: 0.5rem;">
-                <label>
+            <button id="calculateBtn">Work it out →</button>
+
+            <div class="input-group" style="margin-top: 0.3rem;">
+                <label class="checkbox-row">
                     <input type="checkbox" id="showStepsCheck" checked />
-                    Show Steps
+                    Show working
                 </label>
             </div>
         </section>
 
-        <!-- RIGHT PANEL: Output + Steps (70%) -->
+        <!-- RIGHT PAGE: Output + Steps -->
         <section class="output-panel">
             <div class="result-box" id="resultBox">
-                <span class="result-label">Result</span>
-                <span class="result-value" id="resultValue">—</span>
+                <span class="result-label">Answer:</span>
+                <span class="result-display" id="resultDisplay">
+                    <span class="result-value" id="resultValue"><span class="result-text-fallback" id="resultText">—</span></span>
+                </span>
                 <button id="copyBtn" title="Copy result">📋</button>
+            </div>
+            <div class="steps-header">
+                <h3>Working</h3>
+                <button id="copyStepsBtn" type="button">Copy</button>
             </div>
             <div class="steps-container" id="stepsContainer">
                 <div class="steps-placeholder">
-                    <p>Enter values and click <strong>Calculate</strong></p>
-                    <p class="hint">Steps will appear here</p>
+                    <p>Hand me a problem</p>
+                    <p class="hint">and I'll write out the steps</p>
+                </div>
+            </div>
+            <div class="history-section">
+                <div class="history-header" id="historyHeader">
+                    <h3>Earlier pages</h3>
+                    <span class="history-toggle-icon" id="historyToggleIcon">▾</span>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">Nothing worked out yet</div>
                 </div>
             </div>
         </section>
@@ -118,9 +160,9 @@
     <!-- ===== FOOTER ===== -->
     <footer>
         <p>
-            &copy; 2026 <strong>Omega Mu Gamma Studio</strong> ·
+            &copy; 2026 Omega Mu Gamma Studio ·
             <a href="#" target="_blank">MIT License</a> ·
-            Built with ❤️ for DPSD students
+            Built for DPSD students
         </p>
     </footer>
 
