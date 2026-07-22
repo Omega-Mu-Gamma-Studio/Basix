@@ -188,6 +188,7 @@ function fromDecimal(decimal, base, maxFrac = 10) {
 
 // ===== BINARY ARITHMETIC =====
 function binaryAdd(a, b) {
+    if (a.includes('.') || b.includes('.')) throw new Error('binaryAdd only accepts whole binary numbers (no decimal point).');
     const steps = [];
     let carry = 0;
     let result = '';
@@ -281,6 +282,7 @@ function toExcess3(decStr) {
 
 // ===== GRAY CODE =====
 function toGray(binary) {
+    if (binary.includes('.')) throw new Error('Gray code only works with whole binary numbers (no decimal point).');
     const steps = [];
     let gray = binary[0];
     steps.push(`MSB stays: ${binary[0]} → ${gray}`);
@@ -294,6 +296,7 @@ function toGray(binary) {
 
 // ===== COMPLEMENT (operation on a bit/digit string) =====
 function complement(binary, type) {
+    if (binary.includes('.')) throw new Error("Complement only works with whole binary numbers (no decimal point).");
     const steps = [];
     let result = '';
     if (type === 1) {
@@ -321,6 +324,7 @@ function decimalAddOne(str) {
     return (carry ? '1' : '') + digits.join('');
 }
 function complementDecimal(decStr, type) {
+    if (decStr.includes('.')) throw new Error("This complement only works with whole decimal numbers (no decimal point).");
     const steps = [];
     let nines = '';
     for (let ch of decStr) {
@@ -501,8 +505,10 @@ calculateBtn.addEventListener('click', () => {
     if (op === 'convert') {
         if (!isValidForBase(numStr, fromBase)) return showError(`Invalid digits for base ${fromBase}`);
     } else if (BINARY_OPS.includes(op)) {
+        if (numStr.includes('.')) return showError('This operation only works with whole binary numbers — remove the decimal point.');
         if (!isValidForBase(numStr, 2)) return showError('Only 0s and 1s allowed for this operation');
     } else if (DECIMAL_DIGIT_OPS.includes(op)) {
+        if (numStr.includes('.')) return showError('This operation only works with whole decimal numbers — remove the decimal point.');
         if (!isValidForBase(numStr, 10)) return showError('Only decimal digits allowed for this operation');
     }
 
@@ -521,6 +527,7 @@ calculateBtn.addEventListener('click', () => {
             case 'add': {
                 const num2 = secondNumber.value.trim();
                 if (!num2) return showError('Enter the second number');
+                if (num2.includes('.')) return showError('Second number must be a whole binary number — remove the decimal point.');
                 if (!isValidForBase(num2, 2)) return showError('Second number must be binary');
                 const r = binaryAdd(numStr, num2);
                 displayResult = r.value; steps = r.steps;
@@ -529,6 +536,7 @@ calculateBtn.addEventListener('click', () => {
             case 'subtract': {
                 const num2 = secondNumber.value.trim();
                 if (!num2) return showError('Enter the second number');
+                if (num2.includes('.')) return showError('Second number must be a whole binary number — remove the decimal point.');
                 if (!isValidForBase(num2, 2)) return showError('Second number must be binary');
                 const r = binarySubtract(numStr, num2);
                 displayResult = r.value; steps = r.steps;
